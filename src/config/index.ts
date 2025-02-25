@@ -9,3 +9,10 @@ export async function config(path: string = '/app/config/') {
   }
   return configService;
 }
+
+// Example usage in another service
+// import { config } from 'config-lib';
+// async function main() {
+//   const cfg = await config('/app/prod/config/');
+//   console.log(cfg.get('db.url'));
+// }

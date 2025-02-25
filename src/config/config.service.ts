@@ -4,9 +4,9 @@ import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
 export class ConfigService {
-  private ssm: AWS.SSM;
+  private readonly ssm: AWS.SSM;
   private config: Record<string, any> = {};
-  private path: string;
+  private readonly path: string;
 
   constructor(path: string = '/app/config/') {
     this.ssm = new AWS.SSM({ region: process.env.AWS_REGION || 'us-east-1' });
@@ -38,13 +38,10 @@ export class ConfigService {
   }
 
   get<T>(key: string): T {
-    return this.config[key] as T;
+    return key.split('.').reduce((acc, part) => acc && acc[part], this.config) as T;
+  }
+
+  getAll(): Record<string, any> {
+    return this.config;
   }
 }
-
-// Example usage in another service
-// import { config } from 'config-lib';
-// async function main() {
-//   const cfg = await config('/app/prod/config/');
-//   console.log(cfg.get('db.url'));
-// }
