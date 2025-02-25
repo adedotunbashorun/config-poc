@@ -1,0 +1,20 @@
+{
+  "name": "@eukapay/config",
+  "version": "1.0.0",
+  "description": "manage eukapay service configurations",
+  "main": "dist/config/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "types": "dist/config/global.d.ts",
+  "author": "adedotunolawale@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "typescript": "^5.7.3"
+  }
+}
