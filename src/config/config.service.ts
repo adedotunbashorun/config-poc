@@ -20,16 +20,27 @@ export class ConfigService {
 
   private async fetchSSMParameters(): Promise<Record<string, string>> {
     try {
-      const result = await this.ssm
-        .getParametersByPath({ Path: this.path, WithDecryption: true })
-        .promise();
-      
-      const parameters: Record<string, string> = {};
-      result.Parameters?.forEach((param: AWS.SSM.Parameter) => {
-        if (param.Name && param.Value) {
-          parameters[param.Name.replace(this.path, '')] = param.Value;
-        }
-      });
+      let parameters: Record<string, string> = {};
+      let nextToken: string | undefined = undefined;
+
+      do {
+        const result = await this.ssm
+          .getParametersByPath({
+            Path: this.path,
+            WithDecryption: true,
+            NextToken: nextToken,
+          })
+          .promise();
+
+        result.Parameters?.forEach((param) => {
+          if (param.Name && param.Value) {
+            parameters[param.Name.replace(this.path, '')] = param.Value;
+          }
+        });
+
+        nextToken = result.NextToken;
+      } while (nextToken);
+
       return parameters;
     } catch (error) {
       console.error('Error fetching SSM parameters:', error);
@@ -43,5 +54,9 @@ export class ConfigService {
 
   getAll(): Record<string, any> {
     return this.config;
+  }
+
+  getServiceConfig(service: string) {
+    return this.get(service) || {};
   }
 }

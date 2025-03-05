@@ -1,11 +1,11 @@
-import { ConfigService } from './config.service';
+import { config } from "./config";
 
-let configService: ConfigService;
-
-export async function config(path: string = '/app/config/') {
-  if (!configService) {
-    configService = new ConfigService(path);
-    await configService.loadConfig();
-  }
-  return configService;
-}
+export default async () => {
+  const cfg = await config('/app/prod/config/');
+  return {
+    app: {
+      logLevel: cfg.get('app.logLevel'),
+      supportEmail: cfg.get('app.supportEmail'),
+    },
+  };
+};
