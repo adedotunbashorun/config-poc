@@ -25,11 +25,7 @@ export class ConfigService {
 
       do {
         const result = await this.ssm
-          .getParametersByPath({
-            Path: this.path,
-            WithDecryption: true,
-            NextToken: nextToken,
-          })
+          .getParametersByPath({ Path: this.path, WithDecryption: true, NextToken: nextToken })
           .promise();
 
         result.Parameters?.forEach((param) => {
@@ -56,7 +52,7 @@ export class ConfigService {
     return this.config;
   }
 
-  getServiceConfig(service: string) {
-    return this.get(service) || {};
+  getServiceConfig(service: string): Record<string, any> {
+    return this.config[service] || {};
   }
 }
