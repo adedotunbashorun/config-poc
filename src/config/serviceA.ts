@@ -1,7 +1,7 @@
 import { config } from './config';
 
 export default async () => {
-  const cfg = await config('/app/prod/config/serviceA');
+  const cfg = await config();
   return {
     app: {
       url: cfg.get('app.url'),

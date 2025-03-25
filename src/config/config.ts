@@ -1,11 +1,12 @@
-import { ConfigService } from './config.service';
+import { ConfigService } from "./config.service";
 
 let configService: ConfigService;
 
-export async function config(path: string = '/app/config/') {
+export async function config() {
+  const env = process.env.NODE_ENV || 'dev'; // Default to 'dev'
   if (!configService) {
-    configService = new ConfigService(path);
-    await configService.loadConfig();
+    configService = new ConfigService('/eukapay/');
+    await configService.loadConfig(env);
   }
   return configService;
 }

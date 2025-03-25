@@ -6,31 +6,33 @@ dotenvConfig();
 export class ConfigService {
   private readonly ssm: AWS.SSM;
   private config: Record<string, any> = {};
-  private readonly path: string;
+  private readonly basePath: string;
 
-  constructor(path: string = '/app/config/') {
+  constructor(basePath: string = '/eukapay/') {
     this.ssm = new AWS.SSM({ region: process.env.AWS_REGION || 'us-east-1' });
-    this.path = path;
+    this.basePath = basePath;
   }
 
-  async loadConfig(): Promise<void> {
-    const parameters = await this.fetchSSMParameters();
+  async loadConfig(env: string = 'dev'): Promise<void> {
+    const fullPath = `${this.basePath}${env}/`;
+    const parameters = await this.fetchSSMParameters(fullPath);
     this.config = { ...process.env, ...parameters };
   }
 
-  private async fetchSSMParameters(): Promise<Record<string, string>> {
+  private async fetchSSMParameters(path: string): Promise<Record<string, any>> {
     try {
-      let parameters: Record<string, string> = {};
+      let parameters: Record<string, any> = {};
       let nextToken: string | undefined = undefined;
 
       do {
         const result = await this.ssm
-          .getParametersByPath({ Path: this.path, WithDecryption: true, NextToken: nextToken })
+          .getParametersByPath({ Path: path, WithDecryption: true, NextToken: nextToken })
           .promise();
 
         result.Parameters?.forEach((param) => {
           if (param.Name && param.Value) {
-            parameters[param.Name.replace(this.path, '')] = param.Value;
+            const key = param.Name.replace(path, '').split('/').join('.');
+            parameters[key] = param.Value;
           }
         });
 
@@ -39,7 +41,7 @@ export class ConfigService {
 
       return parameters;
     } catch (error) {
-      console.error('Error fetching SSM parameters:', error);
+      console.error(`Error fetching SSM parameters from ${path}:`, error);
       return {};
     }
   }
@@ -53,6 +55,6 @@ export class ConfigService {
   }
 
   getServiceConfig(service: string): Record<string, any> {
-    return this.config[service] || {};
+    return this.get(service) || {};
   }
 }
