@@ -7,13 +7,13 @@ A configuration management library for handling environment variables using AWS 
 Install via npm:
 
 ```sh
-npm install @eukapay/config
+npm install git+https://github.com/adedotunbashorun/config-poc.git
 ```
 
 Or for local development:
 
 ```sh
-npm install ../@eukapay/config
+npm install git+https://github.com/adedotunbashorun/config-poc.git
 ```
 
 ## Usage in JavaScript/TypeScript Projects
