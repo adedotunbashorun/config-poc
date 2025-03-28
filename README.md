@@ -21,7 +21,7 @@ npm install git+https://github.com/adedotunbashorun/config-poc.git
 ### Basic Usage
 
 ```typescript
-import { config } from '@eukapay/config';
+import { config } from 'config-poc';
 
 (async () => {
   const cfg = await config('/app/prod/config/');
@@ -32,7 +32,7 @@ import { config } from '@eukapay/config';
 ### Service-Specific Configuration
 
 ```typescript
-import { serviceConfig } from '@eukapay/config';
+import { serviceConfig } from 'config-poc';
 
 (async () => {
   const serviceAConfig = await serviceConfig('serviceA');
@@ -50,7 +50,7 @@ Create a **global configuration module** in NestJS.
 
 ```typescript
 import { Module, Global } from '@nestjs/common';
-import { config } from '@eukapay/config';
+import { config } from 'config-poc';
 
 @Global()
 @Module({
@@ -106,7 +106,7 @@ export class AppService {
 
 ```typescript
 import express from 'express';
-import { config } from '@eukapay/config';
+import { config } from 'config-poc';
 
 const app = express();
 
