@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "src/config/global.d.ts"]
+  "include": ["src", "src/global.d.ts"]
 }
