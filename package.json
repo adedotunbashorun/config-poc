@@ -7,7 +7,7 @@
     "build": "tsc",
     "test": "jest"
   },
-  "types": "dist/config/global.d.ts",
+  "types": "src/global.d.ts",
   "author": "adedotunolawale@gmail.com",
   "license": "MIT",
   "dependencies": {
